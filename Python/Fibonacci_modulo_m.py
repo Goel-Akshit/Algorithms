@@ -1,3 +1,4 @@
+# Fn mod m is periodic. The period always starts with 01 and is known as Pisano period.
 # Uses python3
 import math
 fib_dict = {}
@@ -28,7 +29,18 @@ def get_fibonacci(n):
         fib_dict[n] = get_fibonacci(k)*get_fibonacci(k) + get_fibonacci(k-1)*get_fibonacci(k-1)
         return fib_dict[n]
 
+def get_Pisano_period(m):
+    a = 0
+    b = 1
+    for i in range(0,m**2):
+        c = (a+b)%m
+        a = b
+        b = c
+        if(a==0 and b==1):
+            return i+1
+
 if __name__ == '__main__':
 
-    n = int(input())
-    print(get_fibonacci(n))
+    n, m = map(int, input().split())
+    remainder = n % get_Pisano_period(m)
+    print(get_fibonacci(remainder) % m)
