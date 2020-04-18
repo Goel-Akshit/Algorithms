@@ -1,0 +1,16 @@
+implementation using linked list
+    *why linked list
+        ** since array require continuous chunk of memory so may make our program inefficient for large n
+        ** many languages do not list prevalages as in python so being language friendly
+        ** helps to learn more Linked list uses.
+
+    * push
+    * pop
+    * peek
+    * size
+    * search
+    * isEmpty
+
+    * two algo implemenatation
+        * tower ho henoi
+        * bracket matcher
