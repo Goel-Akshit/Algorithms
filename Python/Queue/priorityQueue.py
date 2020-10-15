@@ -1,3 +1,5 @@
+#for min just implement buildMin heap function to it.
+# priority queue can also be use for d-tree(where parent has d-childrens (do if pleases you))
 class PriorityQueue():
     def __init__(self):
         self._size = 0
@@ -6,7 +8,7 @@ class PriorityQueue():
     # we cantnot start from zero index since all our cal are done on index
     # so zero will hault our parent child index calculation
     # my suggestion start with a element at index zero say ($)
-    def parent(self, index):return index//2 if index%2 != 0 else (index//2)-1
+    def parent(self, index):return (index-1)//2
     def left(self, index):return (index*2+1)
     def right(self, index):return (2*index)+2
 
