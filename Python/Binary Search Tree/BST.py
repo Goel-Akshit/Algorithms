@@ -151,6 +151,7 @@ class BST(Node):
         root = z.getRoot()
         y = z.getLeft()
         y.setRoot(root)
+
         if self.parentNode == z:
             self.parentNode = y
 
@@ -294,6 +295,12 @@ class BST(Node):
         else:
             return self.leftDescendant(rootNode.getLeft())
 
+    def rightDescendant(self, rootNode):
+        if rootNode.getRight() == None:
+            return rootNode
+        else:
+            return self.rightDescendant(rootNode.getRight())
+
     def rightAnsector(self, rootNode):
         if rootNode.getRoot() != None:
             if rootNode.getValue() < rootNode.getRoot().getValue():
@@ -301,31 +308,67 @@ class BST(Node):
             else:
                 return self.rightAnsector(rootNode.getRoot())
 
-    # returns 1 smaller
+    # return's smaller
     def previous(self, rootNode):
         if rootNode.getLeft() == None:
             return rootNode
         else:
-            return self.rightAnsector(rootNode.getRight())
+            return self.rightDescendant(rootNode.getLeft())
 
     def delete(self, value):
+        HeightCheckNode = None
         targetNode = self.find(self.parentNode, value)
         if targetNode != -1:
             # case 1:  both child are present or right child is present
             if targetNode.getRight():
                 switchNode = self.leftDescendant(targetNode.getRight())
-                temp = targetNode.getValue()
                 targetNode.setValue(switchNode.getValue())
-                switchNode.setValue(temp)
+                #keep a variable to know from where height will be updated
+                swRoot = switchNode.getRoot()
+                #linking the right side if any
                 if switchNode.getRight():
-                    switchNode.getRight().setRoot(switchNode.getRoot())
-                    switchNode.getRoot().setLeft(switchNode.getRight())
+                    switchNode.getRight().setRoot(swRoot)
+                swRoot.setLeft(switchNode.getRight())
+
+                #deleting node
+                switchNode.setLeft(None)
+                switchNode.setRight(None)
+                switchNode.setRoot(None)
+
+                HeightCheckNode = swRoot
 
             # case 2 only left child is present
             elif targetNode.getLeft():
-                targetNode.getRoot().s
+                swRoot = targetNode.getRoot()
+                if swRoot:
+                    if targetNode == swRoot.getLeft():
+                        swRoot.setLeft(targetNode.getLeft())
+                    elif targetNode == swRoot.getRight():
+                        swRoot.setRight(targetNode.getLeft())
+
+                targetNode.getLeft().setRoot(swRoot)
+
+                targetNode.setLeft(None)
+                targetNode.setRight(None)
+                targetNode.setRoot(None)
+
+                HeightCheckNode = swRoot
 
             # case 3 leaf node
+            else:
+                #case 0: node to delete is the root node of the tree
+                if self.parentNode == targetNode:
+                    self.parentNode = None
+                else:
+                    swRoot = targetNode.getRoot()
+                    if swRoot:
+                        if targetNode == swRoot.getLeft():
+                            swRoot.setLeft(None)
+                        elif targetNode == swRoot.getRight():
+                            swRoot.setRight(None)
+                    targetNode.setRoot(None)
+
+            self.updateHeight(HeightCheckNode)
 
     #dfs- traversal
     def inOrder(self, node):
@@ -360,6 +403,17 @@ class BST(Node):
         print(f"value: {node.getValue()} height : {node.getHeight()}")
 
     #bfs-traversal
+    # it can be implemented recursively using stack but implementation non-recursively using queue is more practical.
+    def bfs(self,node):
+        listi = []
+        listi.append(node)
+        while(listi):
+            temp = listi.pop(0)
+            self.printNode(temp)
+            if temp.getLeft():
+                listi.append(temp.getLeft())
+            if temp.getRight():
+                listi.append(temp.getRight())
 
 def printNode(temp):
     if temp == -1:
@@ -369,16 +423,46 @@ def printNode(temp):
 
 if __name__ == "__main__":
     bst = BST()
-    my_list = list(range(1,25))
-    random.shuffle(my_list)
-    # /prin    t my_list # <- List of unique random numbers
+    # my_list = list(range(1,15))
+    # random.shuffle(my_list)
+    # # /prin    t my_list # <- List of unique random numbers
 
-    for i in my_list:
-        print(i)
-        bst.addNode(i)
+    # for i in my_list:
+    #     print(i)
+    #     bst.addNode(i)
+    bst.addNode(8)
+    bst.addNode(10)
+    bst.addNode(4)
+    bst.addNode(1)
+    bst.addNode(14)
+    bst.addNode(13)
+    bst.addNode(6)
+    bst.addNode(2)
+    bst.addNode(3)
+    bst.addNode(9)
+    bst.addNode(5)
+    bst.addNode(11)
+    bst.addNode(12)
+    bst.bfs(bst.getParentNode())
+    # node = bst.previous(bst.getParentNode())
+    # bst.printNode(node)
 
     print("=======================================================")
-    bst.inOrder(bst.getParentNode())
+    bst.delete(12)
+    bst.bfs(bst.getParentNode())
+    print("=======================================================")
+
+    bst.delete(10)
+    bst.bfs(bst.getParentNode())
+    print("=======================================================")
+    bst.delete(8)
+    bst.bfs(bst.getParentNode())
+    print("=======================================================")
+    bst.delete(4)
+    bst.bfs(bst.getParentNode())
+    print("=======================================================")
+
+    # bst.inOrder(bst.getParentNode())
     # print("=======================================")
     # bst.preOrder(bst.getParentNode())
     # print("=======================================")
