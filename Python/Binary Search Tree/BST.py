@@ -273,7 +273,8 @@ class BST(Node):
             if rootNode.getRight() != None:
                 return self.leftDescendant(rootNode.getRight())
             else:
-                return self.rightAnsector(rootNode.getRoot())
+                if rootNode.getRoot():
+                    return self.rightAnsector(rootNode.getRoot())
 
         else:
             return -1
