@@ -348,6 +348,11 @@ class BST(Node):
 
                 targetNode.getLeft().setRoot(swRoot)
 
+                #since we are bypassing the node to be delete we must have a check for this condition
+                #not require in right deletion as we are not bypassing there instead switch the value with the switch node
+                if targetNode == self.parentNode:
+                    self.parentNode = targetNode.getLeft()
+
                 targetNode.setLeft(None)
                 targetNode.setRight(None)
                 targetNode.setRoot(None)
@@ -415,12 +420,6 @@ class BST(Node):
             if temp.getRight():
                 listi.append(temp.getRight())
 
-def printNode(temp):
-    if temp == -1:
-        print("False")
-    else:
-        print(f"Left: {temp.getLeft()}  Value: {temp.getValue()}  Right: {temp.getRight()}  ")
-
 if __name__ == "__main__":
     bst = BST()
     # my_list = list(range(1,15))
@@ -430,37 +429,20 @@ if __name__ == "__main__":
     # for i in my_list:
     #     print(i)
     #     bst.addNode(i)
-    bst.addNode(8)
-    bst.addNode(10)
-    bst.addNode(4)
     bst.addNode(1)
-    bst.addNode(14)
-    bst.addNode(13)
-    bst.addNode(6)
     bst.addNode(2)
-    bst.addNode(3)
-    bst.addNode(9)
-    bst.addNode(5)
-    bst.addNode(11)
-    bst.addNode(12)
+    bst.addNode(100)
     bst.bfs(bst.getParentNode())
-    # node = bst.previous(bst.getParentNode())
-    # bst.printNode(node)
 
     print("=======================================================")
-    bst.delete(12)
+    bst.delete(100)
     bst.bfs(bst.getParentNode())
     print("=======================================================")
 
-    bst.delete(10)
+    bst.delete(2)
     bst.bfs(bst.getParentNode())
     print("=======================================================")
-    bst.delete(8)
-    bst.bfs(bst.getParentNode())
-    print("=======================================================")
-    bst.delete(4)
-    bst.bfs(bst.getParentNode())
-    print("=======================================================")
+
 
     # bst.inOrder(bst.getParentNode())
     # print("=======================================")
